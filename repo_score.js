@@ -25,7 +25,7 @@
 var GithubGraphQLApi = require('node-github-graphql')
 var sql = require('mysql');
 var github = new GithubGraphQLApi({
-  token: "cc90d291c793196d044637a20c042b38ac10a2c7",
+  token: process.env.GITHUB_API_TOKEN,
   debug: true
 })
 // github.query(`
@@ -90,6 +90,6 @@ function populatefiles(repo_name, path){
             }
         }
         console.log(path + " contents");
-        console.log(JSON.stringify(res, null, 2))
+        //console.log(JSON.stringify(res, null, 2))
     })
 }
