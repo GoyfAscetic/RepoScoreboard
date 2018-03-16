@@ -1,26 +1,3 @@
-// var http = require('http');
-
-// http.createServer(function (req, res) {
-//     res.writeHead(200, {'Content-Type': 'text/html'});
-//     res.end('Hello World!');
-// }).listen(8080);
-
-
-
-// var { graphql, buildSchema } = require('graphql');
-
-// var schema = buildSchema(`
-//   type Query {
-//     hello: String
-//   }
-// `);
-
-// var root = { hello: () => 'Hello world!' };
-
-// graphql(schema, '{ hello }', root).then((response) => {
-//   console.log(response);
-// });
-
 
 var GithubGraphQLApi = require('node-github-graphql')
 var sql = require('mysql');
@@ -28,36 +5,6 @@ var github = new GithubGraphQLApi({
   token: process.env.GITHUB_API_TOKEN,
   debug: true
 })
-// github.query(`
-// {
-//     repositoryOwner(login: "GoyfAscetic") {
-//         repository(name: "googleplay-api") {
-//             object(expression: "master") {
-//                 ... on Commit {
-//                     blame(path: "gpapi/googleplay.py") {
-//                         ranges {
-//                             startingLine
-//                             endingLine
-//                             age
-//                             commit {
-//                                 oid
-//                                 committedDate 
-//                                 author {
-//                                 name
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// `, null, (res, err) => {
-
-//   console.log(JSON.stringify(res.data.repositoryOwner.repository, null, 2))
-// })
 
 populatefiles("googleplay-api", "master:");
 
@@ -85,7 +32,7 @@ function populatefiles(repo_name, path){
             var entry = entries[e];
             if(entry.type === "tree"){
                 var newpath = path + entry.name + "/";
-                //console.log(newpath + " is a tree!");
+                console.log(newpath + " is a tree!");
                 populatefiles(repo_name, newpath);
             }
         }
