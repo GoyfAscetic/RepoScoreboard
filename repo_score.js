@@ -16,6 +16,8 @@ populatefiles("googleplay-api", "master:");
 
 //Find all the files in a repo for a given path
 function populatefiles(repo_name, path){
+    var deferred = Promise.defer();
+    
     //Query the GitHub API for all files in repo <repo_name>
     //found at <path>
     github.query(`
@@ -33,9 +35,11 @@ function populatefiles(repo_name, path){
                     }
                 }
             }
+        }`, null, 
+    (res, err) => {
+        if(err){
+            deferred.reject(err);
         }
-
-        `, null, (res, err) => {
 
         //The array of files returned by Github
         var entries  = res.data.viewer.repository.object.entries
@@ -51,9 +55,14 @@ function populatefiles(repo_name, path){
                 console.log(newpath + " is a tree!");
 
                 //call the function with the new path
-                populatefiles(repo_name, newpath);
+                populatefiles(repo_name, newpath)
+                .then(function() {
+                    deferred.resolve();
+                });;
             }
         }
+
+        return deferred.promise;
         //log all entries found at <path>
         console.log(path + " contents");
         //console.log(JSON.stringify(res, null, 2))
